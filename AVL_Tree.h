@@ -7,7 +7,7 @@ namespace AVL_Tree {
     template<class T>
     class Tree
     {
-    protected:
+    private:
         //корень - его достаточно для хранения всего дерева
         Node<T>* root;
 
@@ -27,48 +27,52 @@ namespace AVL_Tree {
 
         //рекуррентная функция добавления узла. Устроена аналогично, но вызывает сама себя - добавление в левое или правое поддерево
         
-        virtual Node<T>* Add_R(Node<T>* N, Node<T>* Current);
+        Node<T>* Add_R(Node<T>* N, Node<T>* Current);
 
-        virtual Node<T>* Remove_R(const T& data, Node<T>* Current);
+        Node<T>* Remove_R(const T& data, Node<T>* Current);
         
     public:
         //доступ к корневому элементу
-        virtual Node<T>* getRoot() const;
+        Node<T>* getRoot() const;
         
         //конструктор дерева: в момент создания дерева ни одного узла нет, корень смотрит в никуда
-        Tree<T>();
+        Tree<T>(const std::initializer_list<T> = {});
+
+        Tree<T>(const Tree<T>& other);
 
         ~Tree<T>();
         
         //функция для добавления числа. Делаем новый узел с этими данными и вызываем нужную функцию добавления в дерево
-        virtual void Add(T n);
+        void Add(T n);
 
-        virtual void Remove(T n);
+        void Remove(T n);
         
-        virtual Node<T>* Min(Node<T>* Current=NULL) const;
+        Node<T>* Min(Node<T>* Current=nullptr) const;
         
-        virtual Node<T>* Max(Node<T>* Current = NULL) const;
+        Node<T>* Max(Node<T>* Current = nullptr) const;
 
         //поиск узла в дереве. Второй параметр - в каком поддереве искать, первый - что искать
-        virtual Node<T>* Find(T data, Node<T>* Current) const;
+        Node<T>* Find(T data, Node<T>* Current) const;
         
         //три обхода дерева
-        virtual void PreOrder(Node<T>* N, std::ostream& stream) const;
+        void PreOrder(Node<T>* N, std::ostream& stream) const;
 
         //InOrder-обход даст отсортированную последовательность
-        virtual void InOrder(Node<T>* N, std::ostream& stream) const;
+        void InOrder(Node<T>* N, std::ostream& stream) const;
 
-        virtual void PostOrder(Node<T>* N, std::ostream& stream) const;
+        void PostOrder(Node<T>* N, std::ostream& stream) const;
 
-        virtual void AdvOutput(Node<T>* N, std::ostream& stream) const;
+        void AdvOutput(Node<T>* N, std::ostream& stream) const;
         
         Node<T>* getByIndex(const size_t index, Node<T>* Current, size_t& current_index) const;
         
         Node<T>* operator[](const size_t index) const;
+
+        Tree<T>& operator=(const Tree<T>& other);
         
-        iterator<T> begin();
+        iterator<T> begin() const;
         
-        iterator<T> end();
+        iterator<T> end() const;
     };
 }
 

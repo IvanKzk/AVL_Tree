@@ -1,14 +1,18 @@
+#include <algorithm>
 namespace AVL_Tree {
 
 	template<class T>
 	Node<T>* Tree<T>::rotateright(Node<T>* p) // правый поворот вокруг p
-	{
-		Node<T>* q = p->getLeft();
-		if (p->getParent() == NULL) root = q;
-		p->setLeft(q->getRight());
-		q->setRight(p);
+	{	
+		if (!p) return p;
 
-		q->setParent(p->getParent());
+		Node<T>* q = p->getLeft();
+		if (p->getParent() == nullptr) root = q;
+		p->setLeft(q ? q->getRight() : q);
+		if (q) {
+			q->setRight(p);
+			q->setParent(p ? p->getParent() : p);
+		}
 		p->setParent(q);
 
 		fixheight(p);
@@ -19,12 +23,15 @@ namespace AVL_Tree {
 	template<class T>
 	Node<T>* Tree<T>::rotateleft(Node<T>* q) // левый поворот вокруг q
 	{
-		Node<T>* p = q->getRight();
-		if (q->getParent() == NULL) root = p;
-		q->setRight(p->getLeft());
-		p->setLeft(q);
+		if (!q) return q;
 
-		p->setParent(q->getParent());
+		Node<T>* p = q->getRight();
+		if (q->getParent() == nullptr) root = p;
+		q->setRight(p ? p->getLeft() : p);
+		if (p) {
+			p->setLeft(q);
+			p->setParent(q ? q->getParent() : q);
+		}
 		q->setParent(p);
 
 		fixheight(q);
@@ -35,7 +42,7 @@ namespace AVL_Tree {
 	template<class T>
 	int Tree<T>::bfactor(Node<T>* p) const
 	{
-		return height(p->getRight())-height(p->getLeft());
+		return p ? (height(p->getRight())-height(p->getLeft())) : 0;
 	}
 
 	template<class T>
@@ -47,6 +54,7 @@ namespace AVL_Tree {
 	template<class T>
 	void Tree<T>::fixheight(Node<T>* p)
 	{
+		if (!p) return;
 		int hl = height(p->getLeft());
 		int hr = height(p->getRight());
 		p->setHeight((hl>hr?hl:hr)+1);
@@ -73,7 +81,7 @@ namespace AVL_Tree {
 
 	template<class T>
 	void Tree<T>::destroy(Node<T>* current) {
-		if (current == NULL)
+		if (current == nullptr)
 			return;
 		
 		if (current->getLeft())
@@ -89,8 +97,8 @@ namespace AVL_Tree {
 	template<class T>
 	Node<T>* Tree<T>::Add_R(Node<T>* N, Node<T>* Current)
 	{
-		if (N == NULL) return NULL;
-		if (root == NULL)
+		if (N == nullptr) return nullptr;
+		if (root == nullptr)
 		{
 			root = N;
 			return N;
@@ -99,7 +107,7 @@ namespace AVL_Tree {
 		if (Current->getData() > N->getData())
 		{
 			//идем влево
-			if (Current->getLeft() != NULL)
+			if (Current->getLeft() != nullptr)
 				Current->setLeft(Add_R(N, Current->getLeft()));
 			else
 				Current->setLeft(N);
@@ -108,7 +116,7 @@ namespace AVL_Tree {
 		if (Current->getData() < N->getData())
 		{
 			//идем вправо
-			if (Current->getRight() != NULL)
+			if (Current->getRight() != nullptr)
 				Current->setRight(Add_R(N, Current->getRight()));
 			else
 				Current->setRight(N);
@@ -124,7 +132,7 @@ namespace AVL_Tree {
 	template<class T>
 	Node<T>* Tree<T>::Remove_R(const T& data, Node<T>* Current)
 	{	
-		if (Current == NULL)
+		if (Current == nullptr)
 			return Current;
 
 		//ищем элемент
@@ -138,18 +146,18 @@ namespace AVL_Tree {
 		else if (data == Current->getData())
 		{
 			// у элемента одного поддерево или нет вообще
-			if( (Current->getLeft() == NULL) ||
-				(Current->getRight() == NULL) )
+			if( (Current->getLeft() == nullptr) ||
+				(Current->getRight() == nullptr) )
 			{
 				Node<T> *temp = Current->getLeft() ?
 							Current->getLeft() :
 							Current->getRight();
 	
 				//нет поддеревьев
-				if (temp == NULL)
+				if (temp == nullptr)
 				{
 					temp = Current;
-					Current = NULL;
+					Current = nullptr;
 				}
 				else //одно поддерево
 				*Current = *temp; //копируем данные
@@ -171,7 +179,7 @@ namespace AVL_Tree {
 		}
 	
 		//если в дереве только один элемент
-		if (Current == NULL)
+		if (Current == nullptr)
 		return Current;
 	
 		//Обновляем высоту текущего элемента
@@ -213,7 +221,18 @@ namespace AVL_Tree {
 	
 	//конструктор дерева: в момент создания дерева ни одного узла нет, корень смотрит в никуда
 	template<class T>
-	Tree<T>::Tree() { root = NULL; }
+	Tree<T>::Tree(const std::initializer_list<T> elements) : root(nullptr) { 
+		for (const auto& el : elements) {
+			Add(el);
+		}
+	}
+
+	template<class T>
+	Tree<T>::Tree(const Tree<T>& other) : root(nullptr) { 
+		for (const auto& el : other) {
+			Add(el.getData());
+		}
+	}
 
 	template<class T>
 	Tree<T>::~Tree() { destroy(root); }
@@ -237,13 +256,13 @@ namespace AVL_Tree {
 	Node<T>* Tree<T>::Min(Node<T>* Current) const
 	{
 		//минимум - это самый "левый" узел. Идём по дереву всегда влево
-		if (root == NULL) return NULL;
+		if (root == nullptr) return nullptr;
 		
-		if(Current==NULL)
+		if(Current==nullptr)
 			
 		Current = root;
 		
-		while (Current->getLeft() != NULL)
+		while (Current->getLeft() != nullptr)
 			Current = Current->getLeft();
 		
 		return Current;
@@ -253,12 +272,12 @@ namespace AVL_Tree {
 	Node<T>* Tree<T>::Max(Node<T>* Current) const
 	{
 		//минимум - это самый "правый" узел. Идём по дереву всегда вправо
-		if (root == NULL) return NULL;
+		if (root == nullptr) return nullptr;
 		
-		if (Current == NULL)
+		if (Current == nullptr)
 			Current = root;
 	
-		while (Current->getRight() != NULL)
+		while (Current->getRight() != nullptr)
 			Current = Current->getRight();
 	
 		return Current;
@@ -269,25 +288,25 @@ namespace AVL_Tree {
 	Node<T>* Tree<T>::Find(T data, Node<T>* Current) const
 	{
 		//база рекурсии
-		if (Current == NULL) return NULL;
+		if (Current == nullptr) return nullptr;
 		if (Current->getData() == data) return Current;
 		//рекурсивный вызов
 		if (Current->getData() > data) return Find(data, Current->getLeft());
 		if (Current->getData() < data) return Find(data, Current->getRight());
-		return NULL;
+		return nullptr;
 	}
 	
 	//три обхода дерева
 	template<class T>
 	void Tree<T>::PreOrder(Node<T>* N, std::ostream& stream) const
 	{
-		if (N != NULL)
+		if (N != nullptr)
 			stream << N->getData();
 		
-		if (N != NULL && N->getLeft() != NULL)
+		if (N != nullptr && N->getLeft() != nullptr)
 			PreOrder(N->getLeft(), stream);
 		
-		if (N != NULL && N->getRight() != NULL)
+		if (N != nullptr && N->getRight() != nullptr)
 			PreOrder(N->getRight(), stream);
 	}
 
@@ -295,57 +314,57 @@ namespace AVL_Tree {
 	template<class T>
 	void Tree<T>::InOrder(Node<T>* N, std::ostream& stream) const
 	{
-		if (N != NULL && N->getLeft() != NULL)
+		if (N != nullptr && N->getLeft() != nullptr)
 			InOrder(N->getLeft(), stream);
 		
-		if (N != NULL)
+		if (N != nullptr)
 			stream << N->getData();
 		
-		if (N != NULL && N->getRight() != NULL)
+		if (N != nullptr && N->getRight() != nullptr)
 			InOrder(N->getRight(), stream);
 	}
 
 	template<class T>
 	void Tree<T>::PostOrder(Node<T>* N, std::ostream& stream) const
 	{
-		if (N != NULL && N->getLeft() != NULL)
+		if (N != nullptr && N->getLeft() != nullptr)
 			PostOrder(N->getLeft(), stream);
 		
-		if (N != NULL && N->getRight() != NULL)
+		if (N != nullptr && N->getRight() != nullptr)
 			PostOrder(N->getRight(), stream);
 		
-		if (N != NULL)
+		if (N != nullptr)
 			stream << N->getData();
 	}
 
 	template<class T>
 	void Tree<T>::AdvOutput(Node<T>* N, std::ostream& stream) const {
-		if (N != NULL && N->getLeft() != NULL)
+		if (N != nullptr && N->getLeft() != nullptr)
 			InOrder(N->getLeft(), stream);
 		
-		if (N != NULL)
+		if (N != nullptr)
 			stream << "\nCurrent: " << N << ", left: " << N->getLeft() << ", right: " << N->getRight() << '\n' << N->getData() << '\n';
 		
-		if (N != NULL && N->getRight() != NULL)
+		if (N != nullptr && N->getRight() != nullptr)
 			InOrder(N->getRight(), stream);
 	}
 	
 	template<class T>
 	Node<T>* Tree<T>::getByIndex(const size_t index, Node<T>* Current, size_t& current_index) const
 	{
-		if (Current->getLeft() != NULL) {
+		if (Current->getLeft() != nullptr) {
 			Node<T>* result = getByIndex(index, Current->getLeft(), current_index);
-			if (result != NULL) return result;
+			if (result != nullptr) return result;
 		}
 		
 		if (current_index == index) return Current;
 		++current_index;
 		
-		if (Current->getRight() != NULL) {
+		if (Current->getRight() != nullptr) {
 			Node<T>* result = getByIndex(index, Current->getRight(), current_index);
-			if (result != NULL) return result;
+			if (result != nullptr) return result;
 		}
-		return NULL;
+		return nullptr;
 	}
 	
 	template<class T>
@@ -354,14 +373,26 @@ namespace AVL_Tree {
 		Node<T>* found = getByIndex(index, root, start_index);
 		return found;
 	}
+
+	template<class T>
+	Tree<T>& Tree<T>::operator=(const Tree<T>& other) {
+		if (this == &other)
+        	return *this;
+
+		Tree<T> temp(other);
+		root = temp.root;
+		temp.root = nullptr;
+
+    	return *this;
+	}
 	
 	template<class T>
-	iterator<T> Tree<T>::begin() {
+	iterator<T> Tree<T>::begin() const {
 		return iterator<T>(*this, Min());
 	}
 	
 	template<class T>
-	iterator<T> Tree<T>::end() {
-		return iterator<T>(*this, NULL);
+	iterator<T> Tree<T>::end() const {
+		return iterator<T>(*this, nullptr);
 	}
 }

@@ -2,25 +2,25 @@
 namespace AVL_Tree {
 
     template<typename T>
-	iterator<T>::iterator(Tree<T>& parent, Node<T>* current = nullptr) : parent(parent), current(current) {}
+	iterator<T>::iterator(const Tree<T>& parent, Node<T>* current) : parent(parent), current(current) {}
 
     template<typename T>
 	iterator<T>::iterator(const iterator& it) : parent(it.parent), current(it.current) {}
 	
     template<typename T>
-	iterator<T>::iterator& operator++()
+	iterator<T>& iterator<T>::operator++()
 	{ 
-		if (current == NULL || parent.getRoot() == NULL) return *this;
+		if (current == nullptr || parent.getRoot() == nullptr) return *this;
 
-		if (current->getRight() != NULL) { 
+		if (current->getRight() != nullptr) { 
 		current = parent.Min(current->getRight()); 
 		return *this; 
 		}
 
 		Node<T>* Current = current;
 		while(true) {
-		if (Current->getParent() == NULL) {
-			current = NULL;
+		if (Current->getParent() == nullptr) {
+			current = nullptr;
 			return *this;
 		}
 
@@ -32,12 +32,12 @@ namespace AVL_Tree {
 		Current = Current->getParent();
 		}
 
-		current = NULL;
+		current = nullptr;
 		return *this;
 	}
 
     template<typename T>
-	iterator<T>::iterator& operator++(int)
+	iterator<T>& iterator<T>::operator++(int)
 	{ 
 		iterator notModified = *this;
 		++(*this);
@@ -45,19 +45,19 @@ namespace AVL_Tree {
 	}
 
     template<typename T>
-	iterator<T>::iterator& operator--()
+	iterator<T>& iterator<T>::operator--()
 	{ 
-		if (current == NULL || parent.getRoot() == NULL) return *this;
+		if (current == nullptr || parent.getRoot() == nullptr) return *this;
 
-		if (current->getLeft() != NULL) { 
+		if (current->getLeft() != nullptr) { 
 		current = parent.Max(current->getLeft()); 
 		return *this; 
 		}
 
 		Node<T>* Current = current;
 		while(true) {
-		if (Current->getParent() == NULL) {
-			current = NULL;
+		if (Current->getParent() == nullptr) {
+			current = nullptr;
 			return *this;
 		}
 
@@ -69,12 +69,12 @@ namespace AVL_Tree {
 		Current = Current->getParent();
 		}
 
-		current = NULL;
+		current = nullptr;
 		return *this;
 	}
 
     template<typename T>
-	iterator<T>::iterator& operator--(int)
+	iterator<T>& iterator<T>::operator--(int)
 	{ 
 		iterator notModified = *this;
 		--(*this);

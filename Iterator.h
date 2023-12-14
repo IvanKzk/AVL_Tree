@@ -6,11 +6,11 @@ namespace AVL_Tree {
     template<class T>
     class iterator {
         private:
-            Tree<T>& parent;
+            const Tree<T>& parent;
             Node<T>* current;
         
         public:
-            iterator(Tree<T>& parent, Node<T>* current = nullptr);
+            iterator(const Tree<T>& parent, Node<T>* current = nullptr);
             iterator(const iterator& it);
         
             iterator& operator++();
@@ -29,3 +29,5 @@ namespace AVL_Tree {
         };
 
 }
+
+#include "Iterator.cpp"

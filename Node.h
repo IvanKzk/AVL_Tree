@@ -16,30 +16,30 @@ namespace AVL_Tree {
             int height;
         public:
             //доступные извне переменные и функции
-            virtual void setData(const T& d);
+            void setData(const T& d);
             
-            virtual T getData() const;
+            T getData() const;
             
             int getHeight() const;
             
-            virtual Node* getLeft() const;
+            Node* getLeft() const;
             
-            virtual Node* getRight() const;
+            Node* getRight() const;
             
-            virtual Node* getParent() const;
+            Node* getParent() const;
             
-            virtual void setLeft(Node* N);
+            void setLeft(Node* N);
             
-            virtual void setRight(Node* N);
+            void setRight(Node* N);
             
-            virtual void setParent(Node* N);
+            void setParent(Node* N);
             
             //Конструктор. Устанавливаем стартовые значения для указателей
             Node(T n);
             
             Node();
             
-            virtual void setHeight(int h);
+            void setHeight(int h);
         };
 }
 
