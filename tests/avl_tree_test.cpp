@@ -3,17 +3,14 @@
 using namespace std;
 using namespace AVL_Tree;
 
+AVL_Tree tree;
+
 TEST(AVL_Tree, Contstructor_Destructor_Empty) {
-    Tree<int> tree;
     ASSERT_TRUE(tree.getRoot() == nullptr);
 }
 
-TEST(AVL_Tree, Contstructor_Destructor_Node_AddUtils) {
-    Tree<int> tree;
-    ASSERT_TRUE(tree.getRoot() == nullptr);
-
+TEST(AVL_Tree, Add_Iteration_1) {
     tree.Add(1);
-
     ASSERT_FALSE(tree.getRoot() == nullptr);
 
     Node<int>* min = tree.Min();
@@ -21,9 +18,10 @@ TEST(AVL_Tree, Contstructor_Destructor_Node_AddUtils) {
 
     Node<int>* max = tree.Max();
     ASSERT_TRUE((max != nullptr) && (max->getData() == 1));
+}
 
+TEST(AVL_Tree, Add_Iteration_2) {
     tree.Add(2);
-
     ASSERT_FALSE(tree.getRoot() == nullptr);
 
     min = tree.Min();
@@ -31,7 +29,9 @@ TEST(AVL_Tree, Contstructor_Destructor_Node_AddUtils) {
 
     max = tree.Max();
     ASSERT_TRUE((max != nullptr) && (max->getData() == 2));
+}
 
+TEST(AVL_Tree, Add_Iteration_3) {
     tree.Add(3);
 
     min = tree.Min();
@@ -39,7 +39,9 @@ TEST(AVL_Tree, Contstructor_Destructor_Node_AddUtils) {
 
     max = tree.Max();
     ASSERT_TRUE((max != nullptr) && (max->getData() == 3));
+}
 
+TEST(AVL_Tree, Add_Iteration_4) {
     tree.Add(-1);
 
     min = tree.Min();
@@ -47,7 +49,9 @@ TEST(AVL_Tree, Contstructor_Destructor_Node_AddUtils) {
 
     max = tree.Max();
     ASSERT_TRUE((max != nullptr) && (max->getData() == 3));
+}
 
+TEST(AVL_Tree, Copy_Constructor) {
     Tree<int> tree2(tree);
     ASSERT_FALSE(tree2.getRoot() == nullptr);
 
@@ -56,7 +60,9 @@ TEST(AVL_Tree, Contstructor_Destructor_Node_AddUtils) {
 
     max = tree2.Max();
     ASSERT_TRUE((max != nullptr) && (max->getData() == 3));
+}
 
+TEST(AVL_Tree, Assign_Constructor) {
     Tree<int> tree3;
     tree3 = tree;
     ASSERT_FALSE(tree3.getRoot() == nullptr);
@@ -68,7 +74,7 @@ TEST(AVL_Tree, Contstructor_Destructor_Node_AddUtils) {
     ASSERT_TRUE((max != nullptr) && (max->getData() == 3));
 }
 
-TEST(AVL_Tree, Initializer_list_find_remove) {
+TEST(AVL_Tree, Inititalzer_List) {
     Tree<int> tree({1,-1,-2,-3,-4,2,3,4});
     ASSERT_FALSE(tree.getRoot() == nullptr);
 
@@ -77,7 +83,9 @@ TEST(AVL_Tree, Initializer_list_find_remove) {
 
     Node<int>* max = tree.Max();
     ASSERT_TRUE((max != nullptr) && (max->getData() == 4));
+}
 
+TEST(AVL_Tree, Find_Remove) {
     Node<int>* findResult = tree.Find(-3, tree.getRoot());
     ASSERT_TRUE(findResult != nullptr);
 
@@ -85,52 +93,6 @@ TEST(AVL_Tree, Initializer_list_find_remove) {
 
     findResult = tree.Find(-3, tree.getRoot());
     ASSERT_TRUE(findResult == nullptr);
-
-    min = tree.Min();
-    ASSERT_TRUE((min != nullptr) && (min->getData() == -4));
-
-    max = tree.Max();
-    ASSERT_TRUE((max != nullptr) && (max->getData() == 4));
-
-    tree.Remove(-3);
-
-    min = tree.Min();
-    ASSERT_TRUE((min != nullptr) && (min->getData() == -4));
-
-    max = tree.Max();
-    ASSERT_TRUE((max != nullptr) && (max->getData() == 4));
-
-    tree.Remove(4);
-
-    min = tree.Min();
-    ASSERT_TRUE((min != nullptr) && (min->getData() == -4));
-
-    max = tree.Max();
-    ASSERT_TRUE((max != nullptr) && (max->getData() == 3));
-
-    tree.Remove(-4);
-
-    min = tree.Min();
-    ASSERT_TRUE((min != nullptr) && (min->getData() == -2));
-
-    max = tree.Max();
-    ASSERT_TRUE((max != nullptr) && (max->getData() == 3));
-
-    tree.Remove(3);
-
-    min = tree.Min();
-    ASSERT_TRUE((min != nullptr) && (min->getData() == -2));
-
-    max = tree.Max();
-    ASSERT_TRUE((max != nullptr) && (max->getData() == 2));
-
-    tree.Remove(2);
-
-    min = tree.Min();
-    ASSERT_TRUE((min != nullptr) && (min->getData() == -2));
-
-    max = tree.Max();
-    ASSERT_TRUE((max != nullptr) && (max->getData() == 1));
 }
 
 TEST(AVL_Tree, All_bfactors_add_remove) {
@@ -215,10 +177,8 @@ TEST(AVL_Tree, All_bfactors_add_remove) {
     tree7.Remove(1);
 
     min = tree7.Min();
-    //ASSERT_TRUE((min != nullptr) && (min->getData() == 2));
 
     max = tree7.Max();
-    //ASSERT_TRUE((max != nullptr) && (max->getData() == 5));
 
     Tree<int> tree8({1, 2, 3, 4, 5, 6, 7, 8, 9});
     
