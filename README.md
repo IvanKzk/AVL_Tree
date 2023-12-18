@@ -25,3 +25,9 @@ make gcov
 geninfo CMakeFiles/tree_gtest.dir/src.gcda -o coverage.info
 
 genhtml coverage.info -o coverage
+
+# Report generation
+
+cd latex\ report
+
+pdflatex --file-line-error --synctex=1 --shell-escape Tree\ report.tex 
