@@ -1,0 +1,429 @@
+% Шаблон отчета в LaTeX
+% Версия от 16.05.21
+% sbulgakov@hse.ru
+\documentclass[a4paper,12pt]{article}
+\usepackage[unicode, pdftex]{hyperref}
+\usepackage{geometry}
+\geometry{a4paper, left=20mm, right=10mm, top=20mm, bottom=20mm}
+\usepackage{cmap}
+\usepackage{graphicx}
+\usepackage[T2A]{fontenc}
+%\usepackage[cp1251]{inputenc}
+\usepackage[english,russianb]{babel}
+\usepackage{verbatim}
+\usepackage{enumerate}
+\usepackage{minted}
+%%%
+%\usepackage{pscyr}
+%\renewcommand{\rmdefault}{ftm}
+%\renewcommand{\ttdefault}{fcr}
+%%%
+\makeatletter
+\newcounter{isappendix}
+\setcounter{isappendix}{0}
+\renewcommand\appendix{\par
+  \setcounter{section}{0}%
+  \setcounter{subsection}{0}%
+  \addtocontents{toc}{\protect\setcounter{tocdepth}{1}}%
+  \addtocontents{toc}{\protect\setcounter{isappendix}{1}}%
+  \renewcommand\thesection{\Asbuk{section}}
+  \renewcommand\section{\cleardoublepage
+                        \@startsection {section}{1}{\z@}%
+                                       {-3.5ex \@plus -1ex \@minus -.2ex}%
+                                       {2.3ex \@plus.2ex}%
+                                       {\centering\normalfont\Large
+                                        \bfseries\appendixname\space}
+                                       }
+  }
+\renewcommand*\l@section[2]{%
+  \ifnum \c@tocdepth >\z@
+    \addpenalty\@secpenalty
+    \ifnum \c@isappendix >0
+    \setlength\@tempdima{0em}%
+    \else
+    \setlength\@tempdima{2em}%
+    \fi
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode \bfseries
+      \advance\leftskip\@tempdima
+      \hskip -\leftskip
+      \ifnum \c@isappendix >0
+      \appendixname\space#1\nobreak
+      \else
+      #1\nobreak
+      \fi
+       \normalfont\leaders\hbox{$\m@th
+        \mkern \@dotsep mu\hbox{.}\mkern \@dotsep
+        mu$}\hfill\bfseries
+      \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+    \endgroup
+  \fi}
+\renewcommand*\l@subsection{\@dottedtocline{2}{0em}{2em}}
+\makeatother
+%%%
+% 
+\usepackage{accsupp}
+\usepackage{xcolor}
+%
+%\newcommand{\textminus}{-} %OMG WTF ICQ
+% 
+\makeatletter
+\long\def\@makecaption#1#2{%
+   \vskip\abovecaptionskip
+     \bfseries #1. #2\par
+   \vskip\belowcaptionskip}%
+\makeatother
+ 
+\usepackage{listings}
+
+\makeatletter
+\let\fnum@lstlisting\relax
+\def\fnum@lstlisting{%
+  {\lstlistingnamestyle\lstlistingname
+  \ifx\lst@@caption\@empty\else~--~\thelstlisting\fi}}%
+\makeatother
+%
+\lstdefinestyle{cppcode}{
+  basicstyle=\ttfamily,                   % моноширинный шрифт
+  identifierstyle={},                     % 
+  commentstyle=\itshape\color{green},     % 
+  stringstyle=\color{red},                % 
+  showstringspaces=false,                 % 
+  keywordstyle=\color{blue},              % 
+  extendedchars=true,                     % для русского
+  upquote=false,                          % не подменять кавычки
+  tabsize=8,                              % преобразование табов в пробелы
+  columns=fixed,                          % 
+  keepspaces=true,                        %
+  %
+  numbers=left,                           % 
+  numberstyle=\tiny\rmfamily\color{gray}\noncopynumber, 
+  numbersep=1em,                          % отступ нумерации влево
+  numberblanklines=true                   % 
+}
+\lstset{language=C++,style=cppcode,breaklines=true}
+% https://tex.stackexchange.com/questions/122256/only-select-code-without-line-numbers
+\newcommand{\noncopynumber}[1]{
+  \BeginAccSupp{method=escape,ActualText={}}
+  #1
+  \EndAccSupp{}
+}
+%%%
+\makeatletter
+\def\labelitemi{{\bf--}}
+\def\labelenumi{\asbuk{enumi})}
+\def\labelenumii{\arabic{enumii})}
+\makeatother
+\begin{document}
+
+
+\begin{titlepage}
+
+\begin{center}
+{\textsc{\textbf{Правительство Российской Федерации}}}\\
+\vspace{0.5cm}
+\hrule
+\vspace{0.5cm}
+{\textsc{Федеральное государственное автономное образовательное учреждение высшего образования <<РОССИЙСКИЙ УНИВЕРСИТЕТ ТРАНСПОРТА>> (РУТ (МИИТ))}}\\
+\vspace{1cm}
+{\textsc{Институт транспортной техники и систем управления}}\\
+\vspace{1cm}
+Кафедра <<Управление и защита информации>>
+\end{center}
+
+\vspace{\fill}
+
+\begin{center}
+{\Large{\textbf{ОТЧЕТ \\ К КУРСОВОЙ РАБОТЕ}}} \\
+\vspace{1em}
+{\textbf{по дисциплине}} \\
+\vspace{1em}
+{\large{\textbf{<<Языки программирования>>}}}
+\end{center}
+
+\vspace{\fill}
+
+
+\begin{flushright}
+  \begin{minipage}[center]{15cm}
+
+    \begin{minipage}[left]{5cm}
+      {Работу выполнил\\студент группы ТКИ-442}
+    \end{minipage}
+    \begin{minipage}[center]{5cm}
+      \vspace{1.25cm}
+      \hrulefill\\[-1cm]
+      \begin{center}{подпись, дата}\end{center}
+    \end{minipage}
+    \begin{minipage}[right]{4cm}
+      \vspace{0.4cm}
+      \begin{flushright}{И.А. Кожак}\end{flushright}
+    \end{minipage}
+    \\
+    \\
+    \\
+    \begin{minipage}[left]{5cm}
+      {Работу проверил}
+    \end{minipage}
+    \begin{minipage}[center]{5cm}
+      \vspace{1.25cm}
+      \hrulefill\\[-1cm]
+      \begin{center}{подпись, дата}\end{center}
+    \end{minipage}
+    \begin{minipage}[right]{4cm}
+      \vspace{1.25cm}
+      \hrulefill\\[-0.92cm]
+      \begin{center}{}\end{center}
+    \end{minipage}
+  \end{minipage}
+\end{flushright}
+
+\vspace{\fill}
+
+\begin{center}
+Москва~2022
+\end{center}
+\end{titlepage}
+\setcounter{page}{2}
+
+
+\tableofcontents
+\cleardoublepage
+
+
+\section*{Постановка задачи}\addcontentsline{toc}{section}{Постановка задачи}
+Разработать программу на языке Си++ (ISO/IEC 14882:2014), демонстрирующую решение поставленной задачи.
+
+\subsubsection*{Общая часть}
+Разработать шаблоны классов, объекты которых реализуют типы данных, указанные ниже. Для
+этих шаблонов классов разработать необходимые конструкторы, деструктор, конструктор копирования. Разработать операции: добавления/удаления элемента (уточнено в задаче); получения количества элементов; доступа к элементу (перегрузить оператор []). Разработать итератор для указанных шаблонов классов.
+
+\subsubsection*{Задачи}
+\begin{enumerate}
+\item Шаблон «AVL Дерево». Добавление/удаление элемента.
+\end{enumerate}
+
+\cleardoublepage
+\section{Алгоритм решения задачи}
+\subsection{Задача 1}
+\noindent В рамках решения данной задачи был разработан класс  <<\verb!Tree!>>. Данный класс содержит следующие private поля: 
+\begin{itemize}
+  \item root -- тип Node*, содержит корневой элемент дерева
+  \item функции rotateright и rotateleft с возвращаемым значением Node*
+  \item функция bfactor с возвращаемым значением int
+  \item функция height с возвращаемым значением int
+  \item функция fixheight
+  \item функция balance с возвращаемым значением Node*
+  \item функция destroy с возвращаемым значением void, используемая деструктором для очистки памяти
+  \item рекурсивная функция добавления элемента
+   \item рекурсивная функция удаления элемента
+  
+\end{itemize} 
+Также класс содержит следующие public поля:
+\begin{itemize}
+  \item вспомогательный класс Node
+  \item функция-геттер корня дерева getRoot с возвращаемым значением Node*
+  \item конструктор по умолчанию
+  \item деструктор
+  \item функция добавления элемента
+  \item функция удаления элемента
+  \item функция поиска минимума, возвращаемое значение Node*
+  \item функция поиска максимума, возвращаемое значение Node*
+  \item функция поиска произвольного элемента, возвращаемое значение Node*
+  \item три функции обхода и вывода дерева: PreOrder, InOrder, PostOrder
+  \item функция подробного вывода дерева AdvOutput
+  
+\end{itemize} 
+
+При разработке этого класса был создан вспомогательный класс Node. Данный класс содержит следующие private поля: left, right, parent -- тип Node*, data -- тип T, height -- тип int. Также класс содержит следующие public поля:
+\begin{itemize}
+  \item конструктор по элементу
+  \item конструктор по умолчанию
+  \item функция-сеттер, задающая значение поля left
+  \item функция-сеттер, задающая значение поля right
+  \item функция-сеттер, задающая значение поля data
+  \item функция-сеттер, задающая значение поля parent
+  \item функция-сеттер, задающая значение поля height
+  \item функция-геттер, возвращающая значение поля left
+  \item функция-геттер, возвращающая значение поля right
+  \item функция-геттер, возвращающая значение поля data
+  \item функция-геттер, возвращающая значение поля parent
+  \item функция-геттер, возвращающая значение поля height
+\end{itemize} 
+
+Также при разработке этого класса был создан класс Iterator, содержащий private поля parent типа Tree<T>&, current типа Node* и следующие public поля:
+\begin{itemize}
+  \item конструктор по родительскому дереву
+  \item конструктор копирования
+  \item перегрузка оператора *
+  \item перегрузка оператора ++ (постфиксный и префиксный)
+  \item перегрузка оператора - - (постфиксный и префиксный)
+  \item перегрузки операторов == и !=
+\end{itemize} 
+
+\section{Выполнение задания}
+\subsection{Задача 1}
+
+  \begin{enumerate}
+    \item Node
+      \subsubsection{конструктор по элементу}
+      Инициализирует поле data переданным в конструктор элементом, поля left, right и parent  значением nullptr, а поле height значением 1
+      
+      \subsubsection{конструктор по умолчанию}
+      Инициализирует поля left, right и parent  значением nullptr, поле height значением 1, а поле data результатом вызова конструктора по умолчанию от переданного параметра шаблона
+      
+      \subsubsection{функции-сеттеры, задающие значения полей left, right, data, parent, height}
+      Инициализирует соответствующие поля переданным в конструктор элементом соответствующего типа
+      
+      \subsubsection{функции-геттеры, возвращающие значения полей left, right, data, parent, height}
+      Возвращают значения соответствующих полей
+      
+    \item Iterator
+      \subsubsection{конструктор по родительскому дереву}
+      Инициализирует поля parent и current переданными в конструктор элементами (значение current по умолчанию nullptr)
+      
+      \subsubsection{конструктор копирования}
+      Инициализирует поля класса соответствующими полями переданного в конструктор класса
+      
+      \subsubsection{перегрузка оператора *}
+      Возвращает разыменованный указатель current
+      
+      \subsubsection{перегрузка оператора ++}
+      \begin{enumerate}
+      \item Префиксный --
+     Проверяет не содержится ли в поле current текущего класса или в поле root родительского класса значение nullptr. Если содержится -- завершает вызов возвращая разыменованный указатель на текущий класс. В противном случае, если указатель на правое поддерево элемента current не равен nullptr, присваивает полю current значение результата поиска минимума в правом поддереве элемента current (фактически переходя в "самый левый" узел поддерева) и возвращает разыменованный указатель на текущий класс. Иначе, создает новую локальную переменную Current типа Node* и инициализирует ее элементом current текущего класса. После этого при первой возможности переходим "вправо вверх" (текущий элемент должен находится в левой ветви элемента, в который переходим). Пока это невозможно при переходе используем временный элемент Current.
+     
+      \item Постфиксный --
+      Создает копию класса, затем применяет на классе префиксную операцию ++ и возвращает сохраненную до этого копию класса.
+    
+      \end{enumerate}
+      
+      \subsubsection{перегрузка оператора - -}
+      \begin{enumerate}
+      \item Префиксный --
+      Проверяет не содержится ли в поле current текущего класса или в поле root родительского класса значение nullptr. Если содержится -- завершает вызов возвращая разыменованный указатель на текущий класс. В противном случае, если указатель на левое поддерево элемента current не равен nullptr, присваивает полю current значение результата поиска максимума в левом поддереве элемента current (фактически переходя в "самый правый" узел поддерева) и возвращает разыменованный указатель на текущий класс. Иначе, создает новую локальную переменную Current типа Node* и инициализирует ее элементом current текущего класса. После этого при первой возможности переходим "влево вверх" (текущий элемент должен находится в правой ветви элемента, в который переходим). Пока это невозможно при переходе используем временный элемент Current.
+     
+      \item Постфиксный --
+      Создает копию класса, затем применяет на классе префиксную операцию - - и возвращает сохраненную до этого копию класса.
+    
+      \end{enumerate}
+      
+      \subsubsection{перегрузки операторов == и !=}
+      Возвращают результаты соответствующих операций, используя как операнды соответствующие значения полей current переданных элементов
+      
+    \item Tree
+      \subsubsection{функция rotateright}
+      Создает локальную перменную q типа Node* записывая в нее указатель на левое поддерево переданного элемента. Если указатель на родителя переданного элемента равен nullptr присваивает полю root значение q. Затем присваивает полю left переданного элемента значение поля right созданного элемента q. После присваивает полю right созданного элемента q значение переданного элемента. Затем присваивает полю parent созданного элемента значение поля parent переданного элемента. После присваивает полю parent переданного элемента значение q. Затем делает два вызова функции fixheight, передавая как параметр вначале q, затем p (переданный элемент), и завершает вызов возвращая q.
+      
+      \subsubsection{функция rotateleft}
+      Создает локальную перменную p типа Node* записывая в нее указатель на правое поддерево переданного элемента. Если указатель на родителя переданного элемента равен nullptr присваивает полю root значение p. Затем присваивает полю right переданного элемента значение поля left созданного элемента p. После присваивает полю left созданного элемента p значение переданного элемента. Затем присваивает полю parent созданного элемента значение поля parent переданного элемента. После присваивает полю parent переданного элемента значение p. Затем делает два вызова функции fixheight, передавая как параметр вначале q (переданный элемент), затем p, и завершает вызов возвращая q.
+      
+      \subsubsection{функция bfactor}
+      Возвращает разность результатов функций height от правого поддерева переданного элемента и от левого соответственно
+      
+      \subsubsection{функция height}
+      Если значение переданного элемента не равно nullptr возвращает значение поля height переданного элемента, в противном случае возвращает 0
+      
+       \subsubsection{функция fixheight}
+       Получает результаты вызова функции height от левого и правого поддерева переданного элемента и присваивает полю height переданного элемента наибольшее значение, из полученных результатов вызова функций, увеличенное на единицу
+       
+       \subsubsection{функция balance}
+       Вызывает функцию fixheight от переданного узла. Затем получает результат вызова функции bfactor от переданного узла. В случае если результат вызова равен 2, получает результат вызова функции bfactor от правого поддерева переданного узла. Если он меньше нуля, присваивает правому поддереву переданного узла результат вызова функции rotateright от правого поддерева переданного узла. После возвращает результат вызова функции rotateleft от переданного узла. 
+       В случае если вызова функции bfactor от переданного узла равен -2, получает результат вызова функции bfactor от левого поддерева переданного узла. Если он больше нуля, присваивает левому поддереву переданного узла результат вызова функции rotateleft от левого поддерева переданного узла. После возвращает результат вызова функции rotateright от переданного узла. 
+       Если ни одно условие не выполнилось, возвращает переданный узел.
+      
+      \subsubsection{функция destroy}
+      Рекурсивно проходит все дерево освобождая память от элементов, начиная с конца
+      
+      \subsubsection{функция-геттер корня дерева getRoot с возвращаемым значением Node*}
+      Возвращает значение поля root
+      
+      \subsubsection{конструктор по умолчанию}
+      Инициализирует поле root значением nullptr
+      
+      \subsubsection{деструктор}
+      Вызывает функцию destroy передавая в нее значение поля root
+      
+      \subsubsection{рекурсивная функция добавления элемента}
+      Рекурсивно проходит дерево, сравнивая данные, хранимые деревом, с данными, хранимые вставляемым элементом, для нахождения такого места добавления, чтобы после него структура не противоречила определению сбалансированного дерева. После выполнения вставки возвращает результат балансировки дерева (вызов функции balance от текущего элемента).
+      
+      \subsubsection{функция добавления элемента}
+      Создает новый объект типа Node, инициализируя его переданными данными и передает указатель на него в рекурсивную функцию добавления элемента
+      
+      \subsubsection{рекурсивная функция удаления элемента}
+      Если указатель на текущий элемент равен nullptr возвращает его. В противном случае с помощью рекурсивных вызово проходит дерево до тех пор, пока не будет найден удаляемый элемент, или пока дерево не закончится. В случае если удаляемый элемент был найден выполняет следующие действия: если значение хотя бы одного из полей найденного элемента right или left равно nullptr, получает значение не nullptr поля и копирует его данные в найденный элемент. Если значения обоих полей равны nullptr очищает память, выделенную под найденный элемент (удаляет элемент). Если значения обоих полей не равны nullptr получает наименьший элемент в правом поддереве (результат вызова Min от поля right найденного элемента), копирует из него данные в найденный элемент и присваивает полю right найденного элемента результат рекурсивного вызова функции удаления элемента от данных минимального элемента в правом поддереве и правого поддерева найденного элемента. Затем, проверяет итоговое значение найденного элемента. Если оно равно nullptr, возвращает его, завершая вызов. Иначе присваивает полю height найденного элемента максимальное значение из полей height его поддеревьев, увеличенное на единицу. После получает результат вызова функции bfactor от текущего элемента, и перебирая все возможные сочетания результата этого вызова и результата вызова этой же функции от поддеревьев найденного элемента выполняет необходимое для балансировки расбалансированного дерева действие: rotateright для значений > 1 и >= 0 для левого поддерева, Current->setLeft(rotateleft(Current->getLeft())); rotateright для > 1 и < 0 для левого поддерева, rotateleft для < -1 и <= 0 для правого поддерева, Current->setRight(rotateright(Current->getRight())); rotateleft для < -1 и > 0 для правого поддерева. В случае невыполнения ни одного из условий возвращает найденный элемент.
+      
+      \subsubsection{функция удаления элемента}
+      Вызывает рекурсивную функция удаления элемента, передавая как текущий элемент значение поля root
+      
+      \subsubsection{функция поиска минимума, возвращаемое значение Node*}
+      Рекурсивно проходит дерево до самого "левого" узла и возвращает указатель на него (вызовы совершаются пока значение поля left рассматриваемого элемента не станет равно nullptr)
+      
+      \subsubsection{функция поиска максимума, возвращаемое значение Node*}
+      Рекурсивно проходит дерево до самого "правого" узла и возвращает указатель на него (вызовы совершаются пока значение поля right рассматриваемого элемента не станет равно nullptr)
+      
+      \subsubsection{функция поиска произвольного элемента, возвращаемое значение Node*}
+      Рекурсивно проходит все элементы дерева, сравнивая данные, хранимые ими с данными, переданными в функцию
+      
+      \subsubsection{три функции обхода и вывода дерева: PreOrder, InOrder, PostOrder}
+      Рекурсивно проходят дерево, вызывая функцию вывода данных, хранимых элементом в определенное время: для PreOrder сразу после вхождения в функцию (вызов), для InOrder после завершения рекурсивных вызовов от левого поддерва (при таком выводе получаем упорядоченную последовательность), для PostOrder после окончания цепочки рекурсивных вызовов. 
+      
+      \subsubsection{функция подробного вывода дерева}
+      Соответствуют InOrder обходу, но помимо данных, хранимых узлом, выводит информация о поддеревьях, на которые он указывает
+      
+  \end{enumerate}
+
+\section{Получение исполняемых модулей}
+Для получения исполняемых модулей была использована система сборки cmake, также был написан файл CMakeLists.txt. В нем были выставлены следующие параметры сборки:
+\begin{itemize}
+  \item std=C++14 – стандарт языка
+  \item флаги компилятора:
+     \begin{itemize}
+     \item Wall
+     \item pedantic-errors
+     \item fsanitize=undefined
+     \end{itemize} 
+   \item исполняемые файлы
+     \begin{itemize}
+       \item linkedListTest
+       \item TreeTest
+     \end{itemize} 
+\end{itemize} 
+\subsection{Файл {\tt CMakeLists.txt}}
+\lstinputlisting{../cmake/CMakeLists.txt}
+
+
+\appendix
+
+\section{} % Приложение А
+\subsection{Файл {\tt Node.h}}
+\inputminted[breaklines]{C++}{../Node.h}
+\cleardoublepage
+
+\subsection{Файл {\tt Node.cpp}}
+\inputminted[breaklines]{C++}{../Node.cpp}
+
+\section{} % Приложение Б
+\subsection{Файл {\tt AVL_Tree.h}}
+\inputminted[breaklines]{C++}{../AVL_Tree.h}
+\cleardoublepage
+
+\subsection{Файл {\tt AVL_Tree.cpp}}
+\inputminted[breaklines]{C++}{../AVL_Tree.cpp}
+\cleardoublepage
+
+\section{} % Приложение В
+\subsection{Файл {\tt Iterator.h}}
+\inputminted[breaklines]{C++}{../Iterator.h}
+\cleardoublepage
+
+\subsection{Файл {\tt Iterator.cpp}}
+\inputminted[breaklines]{C++}{../Iterator.cpp}
+\cleardoublepage
+
+
+
+\end{document}
+
